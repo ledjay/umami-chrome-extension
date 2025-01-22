@@ -1,0 +1,7 @@
+{
+  "title": "Umami Tracking",
+  "description": "Disable visitor analytics for this site?",
+  "statusOn": "Traffic tracking is enabled for this site",
+  "statusOff": "Traffic tracking is disabled for this site",
+  "madeWithLove": "Made with \u2764 by"
+}

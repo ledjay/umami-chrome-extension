@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Umami Exclude Myself",
+  "version": "1.0",
+  "description": "Toggle Umami analytics tracking for yourself",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": [
+    "storage"
+  ]
+}

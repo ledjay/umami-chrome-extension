@@ -1,0 +1,7 @@
+{
+  "title": "Rastreamento Umami",
+  "description": "Desativar análise de visitantes para este site?",
+  "statusOn": "O rastreamento de tráfego está ativado para este site",
+  "statusOff": "O rastreamento de tráfego está desativado para este site",
+  "madeWithLove": "Feito com ❤ por"
+}

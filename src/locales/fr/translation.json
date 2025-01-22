@@ -1,0 +1,7 @@
+{
+  "title": "Tracking Umami",
+  "description": "Désactiver l'analyse des visiteurs sur ce site?",
+  "statusOn": "Le suivi du trafic est activé pour ce site",
+  "statusOff": "Le suivi du trafic est désactivé pour ce site",
+  "madeWithLove": "Made with ❤ by"
+}
