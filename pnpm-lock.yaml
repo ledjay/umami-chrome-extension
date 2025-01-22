@@ -20,9 +20,6 @@ dependencies:
   i18next:
     specifier: ^24.2.1
     version: 24.2.1(typescript@5.7.3)
-  i18next-browser-languagedetector:
-    specifier: ^8.0.2
-    version: 8.0.2
   react:
     specifier: ^18.2.0
     version: 18.3.1
@@ -1694,12 +1691,6 @@ packages:
     resolution: {integrity: sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==}
     dependencies:
       void-elements: 3.1.0
-    dev: false
-
-  /i18next-browser-languagedetector@8.0.2:
-    resolution: {integrity: sha512-shBvPmnIyZeD2VU5jVGIOWP7u9qNG3Lj7mpaiPFpbJ3LVfHZJvVzKR4v1Cb91wAOFpNw442N+LGPzHOHsten2g==}
-    dependencies:
-      '@babel/runtime': 7.26.0
     dev: false
 
   /i18next@24.2.1(typescript@5.7.3):
