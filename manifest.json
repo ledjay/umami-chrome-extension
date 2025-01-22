@@ -4,9 +4,19 @@
   "version": "1.0",
   "description": "Toggle Umami analytics tracking for yourself",
   "action": {
-    "default_popup": "index.html"
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "assets/icon-16-gray.png",
+      "32": "assets/icon-32-gray.png",
+      "48": "assets/icon-48-gray.png",
+      "128": "assets/icon-128-gray.png"
+    }
   },
-  "permissions": [
-    "storage"
-  ]
+  "icons": {
+    "16": "assets/icon-16-gray.png",
+    "32": "assets/icon-32-gray.png",
+    "48": "assets/icon-48-gray.png",
+    "128": "assets/icon-128-gray.png"
+  },
+  "permissions": ["storage", "activeTab", "scripting"]
 }

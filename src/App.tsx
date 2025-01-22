@@ -5,30 +5,59 @@ import logo from "@/assets/umami-logo.svg";
 
 function App() {
   const [isEnabled, setIsEnabled] = useState(true);
-  const [isAnimating, setIsAnimating] = useState(false);
   const { t } = useTranslation();
 
+  const updateIcon = (enabled: boolean) => {
+    const color = enabled ? "red" : "gray";
+    chrome.action.setIcon({
+      path: {
+        "16": `assets/icon-16-${color}.png`,
+        "32": `assets/icon-32-${color}.png`,
+        "48": `assets/icon-48-${color}.png`,
+        "128": `assets/icon-128-${color}.png`,
+      },
+    });
+  };
+
   useEffect(() => {
-    // Check initial state
-    const disabled = localStorage.getItem("umami.disabled");
-    setIsEnabled(disabled !== null);
+    // Check initial state from the current tab
+    chrome.tabs.query({ active: true, currentWindow: true }, async ([tab]) => {
+      if (tab.id) {
+        const [{ result }] = await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          func: () => localStorage.getItem("umami.disabled"),
+        });
+        const enabled = result !== null;
+        setIsEnabled(enabled);
+        updateIcon(enabled);
+      }
+    });
   }, []);
 
-  const toggleTracking = (checked: boolean) => {
-    setIsAnimating(true);
-    if (checked) {
-      localStorage.setItem("umami.disabled", "1");
-    } else {
-      localStorage.removeItem("umami.disabled");
+  const toggleTracking = async (checked: boolean) => {
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    const tab = tabs[0];
+
+    if (tab.id) {
+      await chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: (checked) => {
+          if (checked) {
+            localStorage.setItem("umami.disabled", "1");
+          } else {
+            localStorage.removeItem("umami.disabled");
+          }
+        },
+        args: [checked],
+      });
+      setIsEnabled(checked);
+      updateIcon(checked);
     }
-    setIsEnabled(checked);
-    // Reset animation after it completes
-    setTimeout(() => setIsAnimating(false), 500);
   };
 
   return (
-    <div className="min-w-[400px] p-4 bg-white shadow text-center">
-      <h1 className="text-sm uppercase font-bold mb-4 text-gray-800 flex gap-2 justify-center items-center ">
+    <div className="w-full p-4 bg-white shadow text-center">
+      <h1 className="text-sm uppercase font-bold mb-4 text-gray-800 flex gap-2 justify-center items-center">
         <img src={logo} alt="Umami Logo" className="w-4" />
         {t("title")}
       </h1>
