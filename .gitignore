@@ -61,3 +61,6 @@ yarn-error.log*
 
 # Browser Extension specific
 web-ext-artifacts/
+
+# Release files
+/releases

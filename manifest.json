@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Umami Exclude Myself",
-  "version": "1.0",
+  "version": "1.0.1",
   "description": "Toggle Umami analytics tracking for yourself",
   "author": "Jérémie Gisserot",
   "homepage_url": "https://github.com/ledjay/umami-chrome-extension",
@@ -21,7 +21,11 @@
     "48": "assets/icon-48-gray.png",
     "128": "assets/icon-128-gray.png"
   },
-  "permissions": ["storage", "activeTab", "scripting"],
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
   "host_permissions": [],
   "offline_enabled": false,
   "short_name": "Umami Toggle"
