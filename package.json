@@ -8,6 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "generate-icons": "tsx scripts/generate-icons.ts",
+    "generate-store-assets": "tsx scripts/generate-store-assets.ts",
     "release": "tsx scripts/release.ts"
   },
   "dependencies": {
