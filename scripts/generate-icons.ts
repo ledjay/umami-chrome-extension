@@ -39,26 +39,30 @@ async function generateIcon({ size, color }: IconConfig): Promise<void> {
     // Color the SVG
     const coloredSvg = await colorSvg(svgContent, color.hex);
 
-    // Convert to PNG at exact size
+    // Convert to PNG with Chrome Web Store compatible settings
     await sharp(coloredSvg)
       .resize(size, size)
-      .png({ compressionLevel: 9 })
+      .png({
+        compressionLevel: 9,
+        force: true,
+        palette: true, // Use palette-based PNG for smaller sizes
+      })
       .toFile(
         path.join(__dirname, `../src/assets/icon-${size}-${color.name}.png`)
       );
 
-    // Verify the size
-    const verifySize = await sharp(
+    // Verify the size and format
+    const metadata = await sharp(
       path.join(__dirname, `../src/assets/icon-${size}-${color.name}.png`)
     ).metadata();
 
-    if (verifySize.width === size && verifySize.height === size) {
+    if (metadata.width === size && metadata.height === size) {
       console.log(
         `✓ Successfully generated ${color.name} icon at exact ${size}x${size}px`
       );
     } else {
       throw new Error(
-        `Generated icon size mismatch. Expected ${size}x${size}, got ${verifySize.width}x${verifySize.height}`
+        `Generated icon size mismatch. Expected ${size}x${size}, got ${metadata.width}x${metadata.height}`
       );
     }
   } catch (error) {
