@@ -23,26 +23,14 @@ const colors = {
 
 const inputFile = path.join(__dirname, "../src/assets/umami-logo.svg");
 
-// Visual weight adjustment factor (approximately 90% of container size)
-// This helps achieve equal visual weight as per the guidelines
-const visualWeightFactor = 0.9;
-
 async function colorSvg(svgContent: string, color: string): Promise<Buffer> {
-  // Replace all fill and stroke attributes with our color
-  const coloredSvg = svgContent
-    .replace(/fill="[^"]*"/g, `fill="${color}"`)
-    .replace(/stroke="[^"]*"/g, `stroke="${color}"`);
-
+  // Replace fill attribute with our color
+  const coloredSvg = svgContent.replace(/fill="#[^"]*"/, `fill="${color}"`);
   return Buffer.from(coloredSvg);
 }
 
 async function generateIcon({ size, color }: IconConfig): Promise<void> {
-  const actualSize = Math.round(size * visualWeightFactor);
-  const padding = Math.floor((size - actualSize) / 2);
-
-  console.log(
-    `Generating ${color.name} icon for size ${size}px (actual size: ${actualSize}px)`
-  );
+  console.log(`Generating ${color.name} icon for size ${size}x${size}px...`);
 
   try {
     // Read the SVG file
@@ -51,43 +39,31 @@ async function generateIcon({ size, color }: IconConfig): Promise<void> {
     // Color the SVG
     const coloredSvg = await colorSvg(svgContent, color.hex);
 
-    // Get metadata to calculate proper dimensions
-    const metadata = await sharp(coloredSvg).metadata();
-    const aspectRatio = metadata.width! / metadata.height!;
-
-    // Calculate dimensions that maintain aspect ratio
-    let resizeWidth = actualSize;
-    let resizeHeight = actualSize;
-
-    if (aspectRatio > 1) {
-      resizeHeight = Math.round(actualSize / aspectRatio);
-    } else {
-      resizeWidth = Math.round(actualSize * aspectRatio);
-    }
-
+    // Convert to PNG at exact size
     await sharp(coloredSvg)
-      .resize(resizeWidth, resizeHeight, {
-        fit: "contain",
-        background: { r: 0, g: 0, b: 0, alpha: 0 },
-      })
-      .extend({
-        top: padding + Math.floor((actualSize - resizeHeight) / 2),
-        bottom: padding + Math.ceil((actualSize - resizeHeight) / 2),
-        left: padding + Math.floor((actualSize - resizeWidth) / 2),
-        right: padding + Math.ceil((actualSize - resizeWidth) / 2),
-        background: { r: 0, g: 0, b: 0, alpha: 0 },
-      })
-      .png()
+      .resize(size, size)
+      .png({ compressionLevel: 9 })
       .toFile(
         path.join(__dirname, `../src/assets/icon-${size}-${color.name}.png`)
       );
 
-    console.log(
-      `✓ Successfully generated ${color.name} icon for size ${size}px`
-    );
+    // Verify the size
+    const verifySize = await sharp(
+      path.join(__dirname, `../src/assets/icon-${size}-${color.name}.png`)
+    ).metadata();
+
+    if (verifySize.width === size && verifySize.height === size) {
+      console.log(
+        `✓ Successfully generated ${color.name} icon at exact ${size}x${size}px`
+      );
+    } else {
+      throw new Error(
+        `Generated icon size mismatch. Expected ${size}x${size}, got ${verifySize.width}x${verifySize.height}`
+      );
+    }
   } catch (error) {
     console.error(
-      `✗ Error generating ${color.name} icon for size ${size}px:`,
+      `✗ Error generating ${color.name} icon for size ${size}x${size}px:`,
       error
     );
     throw error;
